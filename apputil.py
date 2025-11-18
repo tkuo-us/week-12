@@ -25,10 +25,10 @@ def update_board(current_board):
             neighbors = board[r_min:r_max, c_min:c_max].sum() - board[i, j]
 
             # according to the rules of Conway's Game of Life
-            if board[i, j] == 1:
+            if board[i, j] == 1:    # Survival
                 if neighbors == 2 or neighbors == 3:
                     updated_board[i, j] = 1
-            else:  # dead cell
+            else:  # Death
                 if neighbors == 3:
                     updated_board[i, j] = 1  # becomes alive
 
@@ -62,3 +62,20 @@ def show_game(game_board, n_steps=10, pause=0.5):
         # wait for the next step
         if step + 1 < n_steps:
             time.sleep(pause)
+
+
+def recursive_game(step=0, max_steps=10, board=None):
+    # first call: initialize board if not provided
+    if board is None:
+        board = np.random.randint(2, size=(10, 10))
+
+    # base case: check if max steps reached
+    if step >= max_steps:
+        return board
+
+    # update board
+    from apputil import update_board
+    new_board = update_board(board)
+
+    # recursive case: call function again with incremented step
+    return recursive_game(step + 1, max_steps, new_board)
