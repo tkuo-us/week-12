@@ -7,7 +7,30 @@ import matplotlib.pyplot as plt
 
 def update_board(current_board):
     # your code here ...
-    updated_board = current_board
+    # updated_board = current_board
+
+    # transform input to integer type for easier calculations
+    board = current_board.astype(int)
+    rows, cols = board.shape
+
+    # create an empty board for the updated state
+    updated_board = np.zeros((rows, cols), dtype=int)
+
+    # calculate the next state for each cell
+    for i in range(rows):
+        for j in range(cols):
+            # get 3x3 neighborhood
+            r_min, r_max = max(i-1, 0), min(i+2, rows)
+            c_min, c_max = max(j-1, 0), min(j+2, cols)
+            neighbors = board[r_min:r_max, c_min:c_max].sum() - board[i, j]
+
+            # according to the rules of Conway's Game of Life
+            if board[i, j] == 1:
+                if neighbors == 2 or neighbors == 3:
+                    updated_board[i, j] = 1
+            else:  # dead cell
+                if neighbors == 3:
+                    updated_board[i, j] = 1  # becomes alive
 
     return updated_board
 
